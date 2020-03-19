@@ -2,6 +2,8 @@ import React from 'react';
 
 import {Alert, Button, Card, Col, Container, Form, Row} from "react-bootstrap";
 import {createNewTaskList, deleteTasksList, getAvailableLists} from "../utils/TaskUtils";
+import Footer from "../components/Footer";
+import Page from "../components/Page";
 
 interface HomepageState {
     tasksLists: string[];
@@ -25,9 +27,8 @@ class Homepage extends React.Component<{}, HomepageState> {
 
     createNewList = (e: any) => {
         e.preventDefault();
-        this.setState({...this.state, createEnable: false});
         createNewTaskList(e.target.listName.value);
-        this.loadLists();
+        this.setState({...this.state, createEnable: false}, () => this.loadLists());
     };
 
     deleteList = (name: string) => {
@@ -90,16 +91,12 @@ class Homepage extends React.Component<{}, HomepageState> {
 
     render() {
         return (
-            <Container>
-                <Row className="justify-content-md-center">
-                    <Col lg={6}>
-                        <h1>Available tasks lists</h1>
-                        {this.renderCreateFields()}
-                        <hr />
-                        {this.renderExistingTasksLists()}
-                    </Col>
-                </Row>
-            </Container>
+            <Page>
+                <h1>Available tasks lists</h1>
+                {this.renderCreateFields()}
+                <hr />
+                {this.renderExistingTasksLists()}
+            </Page>
         )
     }
 }

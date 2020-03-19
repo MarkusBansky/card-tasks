@@ -2,6 +2,8 @@ import React from 'react';
 import {Button, Card, Col, Container, Form, Row, Table} from "react-bootstrap";
 import {getTasksFromList, updateTasksFromList} from "../utils/TaskUtils";
 import '../styles/Edit.scss';
+import Footer from "../components/Footer";
+import Page from "../components/Page";
 
 interface EditState {
     tasks: string[];
@@ -38,7 +40,7 @@ class Edit extends React.Component<{}, EditState> {
             const multipleLines = text.split('\n');
             multipleLines.forEach(s => lines.push(s.trim()));
         } else {
-            lines.push(text.trim());
+            lines.push(text.replace("\n", " ").trim());
         }
         newTasks = newTasks.concat(lines);
 
@@ -98,21 +100,16 @@ class Edit extends React.Component<{}, EditState> {
         const {match} = this.props as any;
 
         return (
-            <Container>
-                <Row className="justify-content-md-center">
-                    <Col lg={6}>
-                        <h1>Edit tasks</h1>
-                        <Button variant="light" size={'sm'} href={'/'}>Back</Button>{' '}
-                        <Button variant="light" size={'sm'} href={`/${match.params.name}`}>Open</Button>{' '}
-                        <hr />
-                        {this.renderAddTask()}
-                        <hr />
-                        <h3>Existing tasks: {tasks.length}</h3>
-                        <br />
-                        {this.renderTasks()}
-                    </Col>
-                </Row>
-            </Container>
+            <Page>
+                <h1>Edit tasks</h1>
+                <Button variant="light" size={'sm'} href={'/'}>Back</Button>{' '}
+                <Button variant="light" size={'sm'} href={`/${match.params.name}`}>Open</Button>{' '}
+                <hr />
+                {this.renderAddTask()}
+                <hr />
+                <h3>Existing tasks: {tasks.length}</h3>
+                {this.renderTasks()}
+            </Page>
         )
     }
 }

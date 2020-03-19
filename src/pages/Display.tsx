@@ -4,6 +4,7 @@ import '../styles/Display.scss';
 import {Alert, Button, Col, Container, Row} from "react-bootstrap";
 import {shuffle} from "../utils/Utils";
 import {getTasksFromList} from "../utils/TaskUtils";
+import Page from "../components/Page";
 
 interface DisplayState {
     tasks: string[];
@@ -72,14 +73,10 @@ class Display extends React.Component<{}, DisplayState> {
 
     render() {
         return (
-            <Container>
-                <Row className="justify-content-md-center">
-                    <Col lg={6}>
-                        <Button variant="light" size={'sm'} href={'/'}>Back</Button>{' '}
-                        {this.renderStacks()}
-                    </Col>
-                </Row>
-            </Container>
+            <Page>
+                <Button variant="light" size={'sm'} href={'/'}>Back</Button>{' '}
+                {this.renderStacks()}
+            </Page>
         );
     }
 }

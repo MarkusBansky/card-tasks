@@ -2,20 +2,13 @@
 
 $use-filters: true;
 
-.footer {
-    position: fixed;
-    bottom: 20px;
-    text-align: center;
-    color: #bbe1fa;
-}
-
 .card-stack {
     will-change: transform;
     position: relative;
     width: 25rem;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 7rem;
+    margin-top: 5rem;
 }
 
 .card-set {
