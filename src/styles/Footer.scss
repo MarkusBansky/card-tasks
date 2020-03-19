@@ -8,9 +8,10 @@
 
   width: 100%;
   text-align: center;
-  background-color: $color-main-secondary;
   color: darken($color-main-primary, 25%);
-  box-shadow: 0 0 0 .1rem rgba(#ffb0cd, .2);
+
+  font-weight: 300 !important;
+  font-size: 9pt !important;
 
   p {
     padding: 0;

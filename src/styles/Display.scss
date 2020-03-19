@@ -90,12 +90,14 @@ $use-filters: true;
     transform: translateY(0) translateX(calc(-100% - 1rem)) scale(1);
     transition: transform .5s, opacity .2s .3s, filter .1s;
     transition-timing-function: ease-in;
-    box-shadow: 0 .2rem 0 rgba(#ffb0cd, .2);
+    box-shadow: 0 .2rem 0 rgba(#ffb0cd, .5);
     border-radius: 5px;
     justify-content: center;
     align-items: center;
     z-index: 1;
     min-height: 50vh;
+
+    overflow: hidden;
 
     &::before {
         content: '';
@@ -110,22 +112,19 @@ $use-filters: true;
         justify-content: space-around;
         padding: 2rem;
         text-align: center;
+
+        h1 {
+            font-size: 32pt;
+        }
     }
 
     label {
         color: white;
         display: inline-block;
         padding: 0.4rem 2rem;
-        margin: 8rem 1rem 1rem;
-        background-color: #ffb0cd;
+        background-color: rgba(1, 1, 1, 0.05);
         border-radius: 200px;
         user-select: none;
-        &:hover {
-            background-color: darken(#ffb0cd, 10%);
-        }
-        &:active {
-            background-color: darken(#ffb0cd, 20%);
-        }
     }
 
     .card-explanatory {
@@ -134,6 +133,32 @@ $use-filters: true;
         color: $color-main-primary;
     }
 }
+
+.stack-card-hidden {
+    background: linear-gradient(-45deg, #f8dc88, #f76a8c, #c2f0fc, #ccf0e1);
+    color: #ffffff;
+
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+
+    p {
+        font-weight: 600;
+        font-size: 18pt;
+    }
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 //cool stuff ends here.
 body {
     background: #ffffff;
