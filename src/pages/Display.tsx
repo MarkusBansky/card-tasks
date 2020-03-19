@@ -1,9 +1,9 @@
 import React from 'react';
 
 import '../styles/Display.scss';
-import {Col, Container, Row} from "react-bootstrap";
+import {Alert, Col, Container, Row} from "react-bootstrap";
 import {shuffle} from "../utils/Utils";
-import {fetchTasksFrom} from "../utils/TaskUtils";
+import {getTasksFromList} from "../utils/TaskUtils";
 
 interface DisplayState {
     tasks: string[];
@@ -19,10 +19,9 @@ class Display extends React.Component<{}, DisplayState> {
     componentDidMount(): void {
         const {match} = this.props as any;
 
-        fetchTasksFrom(match.params.name).then((data) => {
-            const shuffledData = shuffle(data);
-            this.setState({...this.state, tasks: shuffledData});
-        }).catch((e) => console.log(e));
+        let tasks = getTasksFromList(match.params.name);
+        const shuffledData = shuffle(tasks);
+        this.setState({...this.state, tasks: shuffledData});
     }
 
     renderNextButton(index: number, hasNext: boolean) {
@@ -45,6 +44,10 @@ class Display extends React.Component<{}, DisplayState> {
 
     renderStacks() {
         const {checkedIndex, tasks} = this.state;
+
+        if (tasks.length === 0) {
+            return <Alert variant={'primary'}>No tasks in this list</Alert>;
+        }
 
         return (
             <div className={'card-stack'}>

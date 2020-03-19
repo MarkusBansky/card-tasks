@@ -11,8 +11,8 @@ function App() {
         <Router history={history}>
             <Switch>
                 <Route path="/" component={Homepage} exact />
-                <Route path="/:name" component={Display} />
-                <Route path="/edit" component={Edit} />
+                <Route path="/:name" component={Display} exact />
+                <Route path="/edit/:name" component={Edit} />
             </Switch>
         </Router>
     );

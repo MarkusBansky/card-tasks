@@ -1,23 +1,28 @@
 import React from 'react';
-import {Button, Col, Container, Row} from "react-bootstrap";
+import {Col, Container, Row} from "react-bootstrap";
+import {getTasksFromList} from "../utils/TaskUtils";
 
 interface EditState {
-    tasksLists: string[];
     tasks: string[];
 }
 
 class Edit extends React.Component<{}, EditState> {
     state = {
-        tasks: [],
-        tasksLists: []
+        tasks: []
     };
 
     componentDidMount(): void {
-
+        this.loadTasks();
     }
 
-    renderExistingTasksLists() {
-        const {tasksLists} = this.state;
+    loadTasks = () => {
+        const {match} = this.props as any;
+        let tasks = getTasksFromList(match.params.name);
+        this.setState({...this.state, tasks: tasks});
+    };
+
+    renderTasks() {
+        const {tasks} = this.state;
 
 
     }
@@ -27,8 +32,8 @@ class Edit extends React.Component<{}, EditState> {
             <Container>
                 <Row className="justify-content-md-center">
                     <Col lg={6}>
-                        <h1>Edit tasks lists</h1>
-                        {this.renderExistingTasksLists()}
+                        <h1>Edit tasks</h1>
+                        {this.renderTasks()}
                     </Col>
                 </Row>
             </Container>
