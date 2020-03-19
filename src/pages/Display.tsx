@@ -5,9 +5,10 @@ import {Alert, Button} from "react-bootstrap";
 import {shuffle} from "../utils/Utils";
 import {getTasksFromList} from "../utils/TaskUtils";
 import Page from "../components/Page";
+import Task from "../models/Task";
 
 interface DisplayState {
-    tasks: string[];
+    tasks: Task[];
     checkedIndex: number;
 }
 
@@ -25,20 +26,11 @@ class Display extends React.Component<{}, DisplayState> {
         this.setState({...this.state, tasks: shuffledData});
     }
 
-    renderNextButton(index: number, hasNext: boolean) {
-        if (!hasNext) {
-            return null;
-        }
-        return <label
-            onClick={() => this.setState({...this.state, checkedIndex: this.state.checkedIndex + 1})}
-        >Next</label>;
-    }
-
-    renderCard(text: string, index: number, hasNext: boolean) {
+    renderCard(task: Task, index: number, hasNext: boolean) {
         return (
             <div className="content">
-                <h1>{text}</h1>
-                {this.renderNextButton(index, hasNext)}
+                <h1>{task.value}</h1>
+                <span className="card-explanatory">Click the card to flip</span>
             </div>
         );
     }
@@ -61,7 +53,7 @@ class Display extends React.Component<{}, DisplayState> {
                                 type={'radio'}
                                 checked={checkedIndex === index}
                             />
-                            <div className={'stack-card'}>
+                            <div className={'stack-card'} onClick={() => this.setState({...this.state, checkedIndex: this.state.checkedIndex + 1})}>
                                 {this.renderCard(item, index, index < tasks.length)}
                             </div>
                         </>

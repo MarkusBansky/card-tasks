@@ -96,11 +96,13 @@ $use-filters: true;
     align-items: center;
     z-index: 1;
     min-height: 50vh;
+
     &::before {
         content: '';
         display: block;
         padding-bottom: 130%;
     }
+
     .content {
         display: flex;
         flex-direction: column;
@@ -109,6 +111,7 @@ $use-filters: true;
         padding: 2rem;
         text-align: center;
     }
+
     label {
         color: white;
         display: inline-block;
@@ -123,6 +126,12 @@ $use-filters: true;
         &:active {
             background-color: darken(#ffb0cd, 20%);
         }
+    }
+
+    .card-explanatory {
+        position: absolute;
+        bottom: 10px;
+        color: $color-main-primary;
     }
 }
 //cool stuff ends here.
