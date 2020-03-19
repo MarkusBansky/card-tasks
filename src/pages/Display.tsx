@@ -1,7 +1,7 @@
 import React from 'react';
 
 import '../styles/Display.scss';
-import {Alert, Col, Container, Row} from "react-bootstrap";
+import {Alert, Button, Col, Container, Row} from "react-bootstrap";
 import {shuffle} from "../utils/Utils";
 import {getTasksFromList} from "../utils/TaskUtils";
 
@@ -75,6 +75,7 @@ class Display extends React.Component<{}, DisplayState> {
             <Container>
                 <Row className="justify-content-md-center">
                     <Col lg={6}>
+                        <Button variant="light" size={'sm'} href={'/'}>Back</Button>{' '}
                         {this.renderStacks()}
                     </Col>
                 </Row>

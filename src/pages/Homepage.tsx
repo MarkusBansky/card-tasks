@@ -39,9 +39,10 @@ class Homepage extends React.Component<{}, HomepageState> {
         const {createEnable} = this.state;
 
         if (!createEnable) {
-            return <Button variant={'primary'}
-                           onClick={() => this.setState({...this.state, createEnable: true})}
-            >Create new task list</Button>;
+            return <Button variant={'primary'} size={'sm'}
+                           onClick={() => this.setState({...this.state, createEnable: true})}>
+                Create new task list
+            </Button>;
         }
 
         return (
@@ -53,8 +54,12 @@ class Homepage extends React.Component<{}, HomepageState> {
                         Enter new tasks list name. Don't use punctuation, only letter, numbers and spaces!
                     </Form.Text>
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button variant="success" type="submit" size="sm">
                     Create
+                </Button>{' '}
+                <Button variant={'light'} size={'sm'}
+                        onClick={() => this.setState({...this.state, createEnable: false})}>
+                    Cancel
                 </Button>
             </Form>
         )
@@ -75,7 +80,7 @@ class Homepage extends React.Component<{}, HomepageState> {
                             <Card.Title>{item.replace('_', " ")}</Card.Title>
                             <Card.Link href={`/${item}`}>Open</Card.Link>
                             <Card.Link href={`/edit/${item}`}>Edit</Card.Link>
-                            <Card.Link href={`/#`} onClick={() => this.deleteList(item)}>Delete</Card.Link>
+                            <Card.Link href={`#`} onClick={() => this.deleteList(item)}>Delete</Card.Link>
                         </Card>
                     )
                 })}
