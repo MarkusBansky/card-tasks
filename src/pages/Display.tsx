@@ -74,7 +74,7 @@ class Display extends React.Component<{}, DisplayState> {
         return (
             <Container>
                 <Row className="justify-content-md-center">
-                    <Col>
+                    <Col lg={6}>
                         {this.renderStacks()}
                     </Col>
                 </Row>

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button, Card, Col, Container, Form, Row} from "react-bootstrap";
-import {createNewTaskList, getTasksFromList, updateTasksFromList} from "../utils/TaskUtils";
+import {getTasksFromList, updateTasksFromList} from "../utils/TaskUtils";
+import '../styles/Edit.scss';
 
 interface EditState {
     tasks: string[];
@@ -24,10 +25,14 @@ class Edit extends React.Component<{}, EditState> {
     addNewTask = (e: any) => {
         const {match} = this.props as any;
         e.preventDefault();
-        let tasks = this.state.tasks;
-        let text = e.target.taskText.value;
-        tasks.push(text);
-        updateTasksFromList(match.params.name, tasks);
+        const tasks = this.state.tasks;
+        const newTasks: string[] = [];
+        tasks.forEach(t => newTasks.push(t));
+
+        let text = e.target.taskText.value as string;
+        newTasks.push(text);
+
+        updateTasksFromList(match.params.name, newTasks);
         this.loadTasks();
     };
 
@@ -80,6 +85,9 @@ class Edit extends React.Component<{}, EditState> {
                     <Col lg={6}>
                         <h1>Edit tasks</h1>
                         {this.renderAddTask()}
+                        <hr />
+                        <h3>Existing tasks:</h3>
+                        <br />
                         {this.renderTasks()}
                     </Col>
                 </Row>
