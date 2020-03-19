@@ -22,7 +22,7 @@ $use-filters: true;
     display: none;
     &:checked {
         //Card 1
-        + .card {
+        + .stack-card {
             display: flex;
             opacity: 1;
             @if ($use-filters) {
@@ -33,7 +33,7 @@ $use-filters: true;
             transition-delay: .3s;
             z-index: 0;
             //card 2
-            ~ .card {
+            ~ .stack-card {
                 z-index: -1;
                 display: flex;
                 opacity: .9;
@@ -44,7 +44,7 @@ $use-filters: true;
                 transition: transform 1.5s, opacity 1.5s, filter .5s;
                 transition-delay: .4s;
                 //card 3
-                ~ .card {
+                ~ .stack-card {
                     z-index: -2;
                     display: flex;
                     opacity: .7;
@@ -55,7 +55,7 @@ $use-filters: true;
                     transition: transform 2s, opacity 2s, filter 1.5s;
                     transition-delay: .5s;
                     //card 4... you know what... I shouldn't have to explain anymore.
-                    ~ .card {
+                    ~ .stack-card {
                         z-index: -3;
                         display: flex;
                         opacity: .5;
@@ -66,7 +66,7 @@ $use-filters: true;
                         transition: transform 2.5s, opacity 2.5s, filter 2s;
                         transition-delay: .7s;
                         //card 5+
-                        ~ .card {
+                        ~ .stack-card {
                             z-index: -4;
                             display: flex;
                             opacity: 0;
@@ -84,7 +84,7 @@ $use-filters: true;
     }
 }
 
-.card {
+.stack-card {
     display: flex;
     will-change: filter;
     position: absolute;

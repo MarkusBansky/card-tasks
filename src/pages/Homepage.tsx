@@ -1,79 +1,54 @@
 import React from 'react';
 
-import '../styles/Homepage.scss';
-import {Col, Container, Row} from "react-bootstrap";
-import {fetchTasks, shuffle} from "../utils/Utils";
+import {Card, Col, Container, Row} from "react-bootstrap";
+import {fetchAvailableTasksList} from "../utils/TaskUtils";
 
 interface HomepageState {
-    tasks: string[];
-    checkedIndex: number;
+    tasksLists: string[];
 }
 
 class Homepage extends React.Component<{}, HomepageState> {
-    state: HomepageState = {
-        tasks: [],
-        checkedIndex: 0
+    state = {
+        tasksLists: []
     };
 
     componentDidMount(): void {
-        fetchTasks().then((data) => {
-            const shuffledData = shuffle(data);
-            this.setState({...this.state, tasks: shuffledData});
-        }).catch((e) => console.log(e));
+        fetchAvailableTasksList()
+            .then((data) => {
+                this.setState({...this.state, tasksLists: data})
+            })
+            .catch((e) => console.error(e));
     }
 
-    renderNextButton(index: number, hasNext: boolean) {
-        if (!hasNext) {
-            return null;
-        }
-        return <label
-            onClick={() => this.setState({...this.state, checkedIndex: this.state.checkedIndex + 1})}
-        >Next</label>;
-    }
-
-    renderCard(text: string, index: number, hasNext: boolean) {
-        return (
-            <div className="content">
-                <h1>{text}</h1>
-                {this.renderNextButton(index, hasNext)}
-            </div>
-        );
-    }
-
-    renderStacks() {
-        const {checkedIndex, tasks} = this.state;
+    renderExistingTasksLists() {
+        const {tasksLists} = this.state;
 
         return (
-            <div className={'card-stack'}>
-                {tasks.map((item, index) => {
+            <div>
+                {tasksLists.map((item: string, index) => {
                     return (
-                        <>
-                            <input
-                                id={`card-${index}`}
-                                className={'card-set'}
-                                type={'radio'}
-                                checked={checkedIndex === index}
-                            />
-                            <div className={'card'}>
-                                {this.renderCard(item, index, index < tasks.length)}
-                            </div>
-                        </>
-                    );
+                        <Card body key={index}>
+                            <Card.Title>{item.replace('_', " ")}</Card.Title>
+                            <Card.Link href={`/${item}`}>Open</Card.Link>
+                            <Card.Link href={`/edit/${item}`}>Edit</Card.Link>
+                        </Card>
+                    )
                 })}
             </div>
-        );
+        )
     }
 
     render() {
         return (
             <Container>
-                <Row>
-                    <Col>
-                        {this.renderStacks()}
+                <Row className="justify-content-md-center">
+                    <Col lg={6}>
+                        <h1>Available tasks lists</h1>
+                        {this.renderExistingTasksLists()}
                     </Col>
                 </Row>
             </Container>
-        );
+        )
     }
 }
 

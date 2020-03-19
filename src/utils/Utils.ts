@@ -9,7 +9,3 @@ export function shuffle(a: any[]) {
     }
     return a;
 }
-
-export async function fetchTasks() {
-    return (await fetch('tasks.json')).json();
-}
