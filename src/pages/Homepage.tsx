@@ -1,8 +1,7 @@
 import React from 'react';
 
-import {Alert, Button, Card, Col, Container, Form, Row} from "react-bootstrap";
+import {Alert, Button, Card, Form} from "react-bootstrap";
 import {createNewTaskList, deleteTasksList, getAvailableLists} from "../utils/TaskUtils";
-import Footer from "../components/Footer";
 import Page from "../components/Page";
 
 interface HomepageState {

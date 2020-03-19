@@ -1,7 +1,7 @@
 import React from 'react';
 
 import '../styles/Display.scss';
-import {Alert, Button, Col, Container, Row} from "react-bootstrap";
+import {Alert, Button} from "react-bootstrap";
 import {shuffle} from "../utils/Utils";
 import {getTasksFromList} from "../utils/TaskUtils";
 import Page from "../components/Page";

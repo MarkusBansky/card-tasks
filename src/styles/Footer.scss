@@ -1,11 +1,16 @@
+@import "colors";
+
 .footer {
   position: fixed;
   bottom: 0;
-  padding: 1rem;
+  padding: 0.5rem 0;
+  margin: 0 !important;
+
   width: 100%;
   text-align: center;
-  background-color: #edf7fa;
-  color: darken(#edf7fa, 25%);
+  background-color: $color-main-secondary;
+  color: darken($color-main-primary, 25%);
+  box-shadow: 0 0 0 .1rem rgba(#ffb0cd, .2);
 
   p {
     padding: 0;

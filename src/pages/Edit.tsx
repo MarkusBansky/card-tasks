@@ -1,8 +1,7 @@
 import React from 'react';
-import {Button, Card, Col, Container, Form, Row, Table} from "react-bootstrap";
+import {Button, Card, Form, Table} from "react-bootstrap";
 import {getTasksFromList, updateTasksFromList} from "../utils/TaskUtils";
 import '../styles/Edit.scss';
-import Footer from "../components/Footer";
 import Page from "../components/Page";
 
 interface EditState {
