@@ -1,11 +1,15 @@
 import React from 'react';
 import {Button, Card, Form, Table} from "react-bootstrap";
 import {getTasksFromList, updateTasksFromList} from "../utils/TaskUtils";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import '../styles/Edit.scss';
 import Page from "../components/Page";
+import Task from "../models/Task";
+import {TaskType} from "../models/TaskType";
 
 interface EditState {
-    tasks: string[];
+    tasks: Task[];
 }
 
 class Edit extends React.Component<{}, EditState> {
@@ -28,20 +32,29 @@ class Edit extends React.Component<{}, EditState> {
         e.preventDefault();
         const tasks = this.state.tasks;
 
-        let newTasks: string[] = [];
+        let newTasks: Task[] = [];
         tasks.forEach(t => newTasks.push(t));
 
-        let text = e.target.taskText.value as string;
+        const text = e.target.taskText.value as string;
+        const hidden = e.target.hidden.checked as boolean;
         const isMulti = e.target.multiples.checked as boolean;
 
-        let lines: string[] = [];
         if (isMulti) {
             const multipleLines = text.split('\n');
-            multipleLines.forEach(s => lines.push(s.trim()));
+            multipleLines.forEach(s => {
+                let task = new Task({});
+                task.hidden = hidden;
+                task.type = TaskType.Text;
+                task.value = s.trim();
+                newTasks.push(task);
+            });
         } else {
-            lines.push(text.replace("\n", " ").trim());
+            let task = new Task({});
+            task.hidden = hidden;
+            task.type = TaskType.Text;
+            task.value = text.replace("\n", " ").trim();
+            newTasks.push(task);
         }
-        newTasks = newTasks.concat(lines);
 
         updateTasksFromList(match.params.name, newTasks);
         this.loadTasks();
@@ -67,8 +80,10 @@ class Edit extends React.Component<{}, EditState> {
                     </Form.Text>
                 </Form.Group>
                 <Form.Group controlId="list-multiples">
-                    <Form.Check custom type="checkbox" name="multiples"
+                    <Form.Check custom type="checkbox" name="multiples" id='multiples'
                             label="Parse as multiple lines, each new line - new task" />
+                    <Form.Check custom type="checkbox" name="hidden" id='hidden'
+                                label="Display this card initially as hidden" />
                 </Form.Group>
                 <Button variant="success" type="submit" size="sm">
                     Add new item
@@ -82,10 +97,11 @@ class Edit extends React.Component<{}, EditState> {
 
         return (
             <Table borderless size={'sm'}>
-                {tasks.map((item: string, index) => {
+                {tasks.map((item: Task, index) => {
                     return (
                         <tr>
-                            <td>{item}</td>
+                            <td>{item.value}</td>
+                            <td>{item.hidden ? <FontAwesomeIcon icon={faEyeSlash} /> : null}</td>
                             <td><Card.Link href={`#`} onClick={() => this.deleteTaskByIndex(index)}>Delete</Card.Link></td>
                         </tr>
                     )

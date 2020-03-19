@@ -1,3 +1,5 @@
+import Task from "../models/Task";
+
 const LISTS = 'lists';
 const LIST_ = 'list_';
 
@@ -15,15 +17,15 @@ export function createNewTaskList(name: string) {
     localStorage.setItem(LISTS, JSON.stringify(lists));
 }
 
-export function getTasksFromList(name: string) {
+export function getTasksFromList(name: string): Task[] {
     let lists = localStorage.getItem(LIST_ + name.replace(" ", "_"));
     if (lists == null) {
-        return [] as string[];
+        return [];
     }
-    return JSON.parse(lists) as string[];
+    return JSON.parse(lists).map((item: any) => new Task(item));
 }
 
-export function updateTasksFromList(name: string, tasks: string[]) {
+export function updateTasksFromList(name: string, tasks: Task[]) {
     localStorage.setItem(LIST_ + name.replace(" ", "_"), JSON.stringify(tasks));
 }
 
