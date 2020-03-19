@@ -1,8 +1,8 @@
 import React from 'react';
 import {Button, Card, Form, Table} from "react-bootstrap";
 import {getTasksFromList, updateTasksFromList} from "../utils/TaskUtils";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faEyeSlash} from '@fortawesome/free-solid-svg-icons';
 import '../styles/Edit.scss';
 import Page from "../components/Page";
 import Task from "../models/Task";
@@ -42,17 +42,19 @@ class Edit extends React.Component<{}, EditState> {
         if (isMulti) {
             const multipleLines = text.split('\n');
             multipleLines.forEach(s => {
+                let val = s.trim();
                 let task = new Task({});
                 task.hidden = hidden;
-                task.type = TaskType.Text;
-                task.value = s.trim();
+                task.type = val.startsWith("http://") || val.startsWith("https://") ? TaskType.Image : TaskType.Text;
+                task.value = val;
                 newTasks.push(task);
             });
         } else {
+            let val = text.replace("\n", " ").trim();
             let task = new Task({});
             task.hidden = hidden;
-            task.type = TaskType.Text;
-            task.value = text.replace("\n", " ").trim();
+            task.type = val.startsWith("http://") || val.startsWith("https://") ? TaskType.Image : TaskType.Text;
+            task.value = val;
             newTasks.push(task);
         }
 

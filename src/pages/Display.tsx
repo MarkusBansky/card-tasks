@@ -6,6 +6,7 @@ import {shuffle} from "../utils/Utils";
 import {getTasksFromList} from "../utils/TaskUtils";
 import Page from "../components/Page";
 import Task from "../models/Task";
+import {TaskType} from "../models/TaskType";
 
 interface DisplayState {
     tasks: Task[];
@@ -28,7 +29,7 @@ class Display extends React.Component<{}, DisplayState> {
         this.setState({...this.state, tasks: shuffledData});
     }
 
-    flipCard = (index: number) => {
+    flipCard = () => {
         this.setState({
             ...this.state,
             checkedIndex: this.state.checkedIndex + 1,
@@ -43,7 +44,7 @@ class Display extends React.Component<{}, DisplayState> {
         });
     };
 
-    renderCard(task: Task, index: number, hasNext: boolean) {
+    renderCard(task: Task, index: number) {
         const {revealed, checkedIndex} = this.state;
 
         if (task.hidden && !revealed && checkedIndex === index) {
@@ -54,12 +55,19 @@ class Display extends React.Component<{}, DisplayState> {
             );
         }
 
-        return (
-            <div className="content">
-                <h1>{task.value}</h1>
-                {/*<span className="card-explanatory">Click the card to flip</span>*/}
-            </div>
-        );
+        if (task.type === TaskType.Text) {
+            return (
+                <div className="content">
+                    <h1>{task.value}</h1>
+                </div>
+            );
+        } else {
+            return (
+                <div className="content">
+                    <img src={task.value} alt={'Revealed'} />
+                </div>
+            );
+        }
     }
 
     renderStacks() {
@@ -82,8 +90,8 @@ class Display extends React.Component<{}, DisplayState> {
                             />
                             <div
                                 className={`stack-card ${item.hidden && !revealed && index === checkedIndex && 'stack-card-hidden'}`}
-                                onClick={() => item.hidden && !revealed ? this.revealCard() : this.flipCard(index)}>
-                                {this.renderCard(item, index, index < tasks.length)}
+                                onClick={() => item.hidden && !revealed ? this.revealCard() : this.flipCard()}>
+                                {this.renderCard(item, index)}
                             </div>
                         </>
                     );

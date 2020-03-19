@@ -116,6 +116,12 @@ $use-filters: true;
         h1 {
             font-size: 32pt;
         }
+
+        img {
+            border-radius: 5px;
+            width: 100%;
+            height: auto;
+        }
     }
 
     label {
