@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {getTasksFromList, updateTasksFromList} from "../utils/TaskUtils";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faEyeSlash} from '@fortawesome/free-solid-svg-icons';
 import Page from "../components/Page";
 import Task from "../models/Task";
 import {TaskType} from "../models/TaskType";
@@ -16,7 +14,7 @@ function renderTasks(tasks: Task[], onDeleteByIndex: (i: number) => void) {
         return (
           <tr key={index}>
             <td>{item.value}</td>
-            <td>{item.hidden ? <FontAwesomeIcon icon={faEyeSlash}/> : null}</td>
+            <td>{item.hidden ? 'is hidden' : null}</td>
             <td><a href={`#`} onClick={() => onDeleteByIndex(index)}>Delete</a></td>
           </tr>
         )
