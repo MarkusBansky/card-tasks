@@ -1,113 +1,91 @@
-import React from 'react';
-
-import '../styles/Display.scss';
-import {Alert, Button} from "react-bootstrap";
+import React, {useEffect, useState} from 'react';
 import {shuffle} from "../utils/Utils";
 import {getTasksFromList} from "../utils/TaskUtils";
 import Page from "../components/Page";
 import Task from "../models/Task";
 import {TaskType} from "../models/TaskType";
 
-interface DisplayState {
-    tasks: Task[];
-    revealed: boolean;
-    checkedIndex: number;
+import '../styles/Display.scss';
+import {useParams} from "react-router-dom";
+
+function renderCard(task: Task, index: number, checkedIndex: number, revealed: boolean) {
+  if (task.hidden && !revealed && checkedIndex === index) {
+    return (
+      <div className="content">
+        <label>CLICK TO REVEAL</label>
+      </div>
+    );
+  }
+
+  if (task.type === TaskType.Text) {
+    return (
+      <div className="content">
+        <h1>{task.value}</h1>
+      </div>
+    );
+  } else {
+    return (
+      <div className="content">
+        <img src={task.value} alt={'Revealed'}/>
+      </div>
+    );
+  }
 }
 
-class Display extends React.Component<{}, DisplayState> {
-    state: DisplayState = {
-        tasks: [],
-        checkedIndex: 0,
-        revealed: false
-    };
+function renderStacks(tasks: Task[], checkedIndex: number, revealed: boolean, revealCard: () => void, flipCard: () => void) {
+  if (tasks.length === 0) {
+    return <div className='alert alert-primary'>No tasks in this list</div>;
+  }
 
-    componentDidMount(): void {
-        const {match} = this.props as any;
-
-        let tasks = getTasksFromList(match.params.name);
-        const shuffledData = shuffle(tasks);
-        this.setState({...this.state, tasks: shuffledData});
-    }
-
-    flipCard = () => {
-        this.setState({
-            ...this.state,
-            checkedIndex: this.state.checkedIndex + 1,
-            revealed: false
-        });
-    };
-
-    revealCard = () => {
-        this.setState({
-            ...this.state,
-            revealed: true
-        });
-    };
-
-    renderCard(task: Task, index: number) {
-        const {revealed, checkedIndex} = this.state;
-
-        if (task.hidden && !revealed && checkedIndex === index) {
-            return (
-                <div className="content">
-                    <label>CLICK TO REVEAL</label>
-                </div>
-            );
-        }
-
-        if (task.type === TaskType.Text) {
-            return (
-                <div className="content">
-                    <h1>{task.value}</h1>
-                </div>
-            );
-        } else {
-            return (
-                <div className="content">
-                    <img src={task.value} alt={'Revealed'} />
-                </div>
-            );
-        }
-    }
-
-    renderStacks() {
-        const {checkedIndex, tasks, revealed} = this.state;
-
-        if (tasks.length === 0) {
-            return <Alert variant={'primary'}>No tasks in this list</Alert>;
-        }
-
+  return (
+    <div className={'card-stack'}>
+      {tasks.map((item, index) => {
         return (
-            <div className={'card-stack'}>
-                {tasks.map((item, index) => {
-                    return (
-                        <>
-                            <input
-                                id={`stack-card-${index}`}
-                                className={'card-set'}
-                                type={'radio'}
-                                checked={checkedIndex === index}
-                            />
-                            <div
-                                className={`stack-card ${item.hidden && !revealed && index === checkedIndex && 'stack-card-hidden'}`}
-                                onClick={() => item.hidden && !revealed ? this.revealCard() : this.flipCard()}>
-                                {this.renderCard(item, index)}
-                            </div>
-                        </>
-                    );
-                })}
+          <>
+            <input
+              id={`stack-card-${index}`}
+              className={'card-set'}
+              type={'radio'}
+              checked={checkedIndex === index}
+            />
+            <div
+              className={`stack-card ${item.hidden && !revealed && index === checkedIndex && 'stack-card-hidden'}`}
+              onClick={() => item.hidden && !revealed ? revealCard() : flipCard()}>
+              {renderCard(item, index, checkedIndex, revealed)}
             </div>
+          </>
         );
-    }
-
-    render() {
-        return (
-            <Page>
-                <Button variant="light" size={'sm'} href={'/'}>Back</Button>{' '}
-                {this.renderStacks()}
-            </Page>
-        );
-    }
+      })}
+    </div>
+  );
 }
 
-export default Display;
+export default function Display() {
+  const params = useParams() as any;
+
+  const [tasks, setTasks] = useState([] as Task[]);
+  const [revealed, setRevealed] = useState(false);
+  const [checkedIndex, setCheckedIndex] = useState(0);
+
+  useEffect(() => {
+    let loadedTasks = getTasksFromList(params.name);
+    const shuffledData = shuffle(loadedTasks);
+    setTasks(shuffledData);
+  }, [params]);
+
+  const flipCard = () => {
+    setCheckedIndex(checkedIndex + 1);
+    setRevealed(false);
+  };
+
+  const revealCard = () => {
+    setRevealed(true);
+  };
+
+  return (
+    <Page>
+      <a className='btn btn-light btn-sm' href={'/'}>Back</a>{' '}
+      {renderStacks(tasks, checkedIndex, revealed, revealCard, flipCard)}
+    </Page>
+  );
+}

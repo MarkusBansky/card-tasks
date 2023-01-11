@@ -1,134 +1,137 @@
-import React from 'react';
-import {Button, Card, Form, Table} from "react-bootstrap";
+import React, {useEffect, useState} from 'react';
 import {getTasksFromList, updateTasksFromList} from "../utils/TaskUtils";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEyeSlash} from '@fortawesome/free-solid-svg-icons';
-import '../styles/Edit.scss';
 import Page from "../components/Page";
 import Task from "../models/Task";
 import {TaskType} from "../models/TaskType";
 
-interface EditState {
-    tasks: Task[];
+import '../styles/Edit.scss';
+import {useParams} from 'react-router-dom';
+
+function renderTasks(tasks: Task[], onDeleteByIndex: (i: number) => void) {
+  return (
+    <table className='table table-sm table-borderless'>
+      {tasks.map((item: Task, index) => {
+        return (
+          <tr key={index}>
+            <td>{item.value}</td>
+            <td>{item.hidden ? <FontAwesomeIcon icon={faEyeSlash}/> : null}</td>
+            <td><a href={`#`} onClick={() => onDeleteByIndex(index)}>Delete</a></td>
+          </tr>
+        )
+      })}
+    </table>
+  )
 }
 
-class Edit extends React.Component<{}, EditState> {
-    state = {
-        tasks: []
-    };
+function renderAddTask(onSubmit: (e: any) => void) {
+  return (
+    <form onSubmit={onSubmit}>
+      <h4>Add new task to the list</h4>
+      <div className="mb-3">
+        <label htmlFor="task-text" className="form-label">Text for the task</label>
+        <textarea name="taskText" placeholder="Task text"
+                  className="form-control" id="task-text" rows={3}
+                  required></textarea>
+        <p className="text-muted">
+          Enter any task text whatever you want.
+        </p>
+      </div>
+      <div className="mb-3">
+        <div className="form-check">
+          <input className="form-check-input" type="checkbox" value="" id="multiples" name='multiples'/>
+          <label className="form-check-label" htmlFor="multiples">
+            Parse as multiple lines, each new line - new task
+          </label>
+        </div>
 
-    componentDidMount(): void {
-        this.loadTasks();
-    }
-
-    loadTasks = () => {
-        const {match} = this.props as any;
-        let tasks = getTasksFromList(match.params.name);
-        this.setState({...this.state, tasks: tasks});
-    };
-
-    addNewTask = (e: any) => {
-        const {match} = this.props as any;
-        e.preventDefault();
-        const tasks = this.state.tasks;
-
-        let newTasks: Task[] = [];
-        tasks.forEach(t => newTasks.push(t));
-
-        const text = e.target.taskText.value as string;
-        const hidden = e.target.hidden.checked as boolean;
-        const isMulti = e.target.multiples.checked as boolean;
-
-        if (isMulti) {
-            const multipleLines = text.split('\n');
-            multipleLines.forEach(s => {
-                let val = s.trim();
-                let task = new Task({});
-                task.hidden = hidden;
-                task.type = val.startsWith("http://") || val.startsWith("https://") ? TaskType.Image : TaskType.Text;
-                task.value = val;
-                newTasks.push(task);
-            });
-        } else {
-            let val = text.replace("\n", " ").trim();
-            let task = new Task({});
-            task.hidden = hidden;
-            task.type = val.startsWith("http://") || val.startsWith("https://") ? TaskType.Image : TaskType.Text;
-            task.value = val;
-            newTasks.push(task);
-        }
-
-        updateTasksFromList(match.params.name, newTasks);
-        this.loadTasks();
-        e.target.taskText.value = "";
-    };
-
-    deleteTaskByIndex = (index: number) => {
-        const {match} = this.props as any;
-        const {tasks} = this.state;
-        const newTasks = tasks.filter((_, i) => i !== index);
-        this.setState({...this.state, tasks: newTasks});
-        updateTasksFromList(match.params.name, newTasks);
-    };
-
-    renderAddTask() {
-        return (
-            <Form onSubmit={this.addNewTask}>
-                <Form.Group controlId="list-name">
-                    <Form.Label>Task</Form.Label>
-                    <Form.Control name="taskText" type="text" placeholder="Task text" as="textarea" required />
-                    <Form.Text className="text-muted">
-                        Enter any task text whatever you want.
-                    </Form.Text>
-                </Form.Group>
-                <Form.Group controlId="list-multiples">
-                    <Form.Check custom type="checkbox" name="multiples" id='multiples'
-                            label="Parse as multiple lines, each new line - new task" />
-                    <Form.Check custom type="checkbox" name="hidden" id='hidden'
-                                label="Display this card initially as hidden" />
-                </Form.Group>
-                <Button variant="success" type="submit" size="sm">
-                    Add new item
-                </Button>
-            </Form>
-        )
-    }
-
-    renderTasks() {
-        const {tasks} = this.state;
-
-        return (
-            <Table borderless size={'sm'}>
-                {tasks.map((item: Task, index) => {
-                    return (
-                        <tr>
-                            <td>{item.value}</td>
-                            <td>{item.hidden ? <FontAwesomeIcon icon={faEyeSlash} /> : null}</td>
-                            <td><Card.Link href={`#`} onClick={() => this.deleteTaskByIndex(index)}>Delete</Card.Link></td>
-                        </tr>
-                    )
-                })}
-            </Table>
-        )
-    }
-
-    render() {
-        const {tasks} = this.state;
-        const {match} = this.props as any;
-
-        return (
-            <Page>
-                <h1>Edit tasks</h1>
-                <Button variant="light" size={'sm'} href={'/'}>Back</Button>{' '}
-                <Button variant="light" size={'sm'} href={`/${match.params.name}`}>Open</Button>{' '}
-                <hr />
-                {this.renderAddTask()}
-                <hr />
-                <h3>Existing tasks: {tasks.length}</h3>
-                {this.renderTasks()}
-            </Page>
-        )
-    }
+        <div className="form-check">
+          <input className="form-check-input" type="checkbox" value="" id="hidden" name='hidden'/>
+          <label className="form-check-label" htmlFor="hidden">
+            Display this card initially as hidden
+          </label>
+        </div>
+      </div>
+      <button className='btn btn-success btn-sm' type="submit">Add new item</button>
+    </form>
+  )
 }
 
-export default Edit;
+export default function Edit() {
+  const params = useParams() as any;
+
+  const [tasks, setTasks] = useState([] as Task[]);
+
+  useEffect(() => {
+    let loadedTasks = getTasksFromList(params.name);
+    setTasks(loadedTasks);
+  }, [params]);
+
+  const deleteTaskByIndex = (index: number) => {
+    const newTasks = tasks.filter((_, i) => i !== index);
+    setTasks(newTasks);
+    updateTasksFromList(params.name, newTasks);
+  };
+
+  const addNewTask = (e: any) => {
+    e.preventDefault();
+
+    let newTasks: Task[] = [];
+    tasks.forEach(t => newTasks.push(t));
+
+    const text = e.target.taskText.value as string;
+    const hidden = e.target.hidden.checked as boolean;
+    const isMulti = e.target.multiples.checked as boolean;
+
+    if (isMulti) {
+      const multipleLines = text.split('\n');
+      multipleLines.forEach(s => {
+        let val = s.trim();
+        let task = new Task({});
+        task.hidden = hidden;
+        task.type = val.startsWith("http://") || val.startsWith("https://") ? TaskType.Image : TaskType.Text;
+        task.value = val;
+        newTasks.push(task);
+      });
+    } else {
+      let val = text.replace("\n", " ").trim();
+      let task = new Task({});
+      task.hidden = hidden;
+      task.type = val.startsWith("http://") || val.startsWith("https://") ? TaskType.Image : TaskType.Text;
+      task.value = val;
+      newTasks.push(task);
+    }
+
+    updateTasksFromList(params.name, newTasks);
+    setTasks(newTasks);
+    e.target.taskText.value = "";
+  };
+
+  return (
+    <Page>
+      <h1>Edit tasks</h1>
+      <div className='row mb-3'>
+        <div className='col'>
+          <a className='btn btn-outline-secondary btn-sm' href={'/'}>Back</a>{' '}
+          <a className='btn btn-outline-primary btn-sm' href={`/${params.name}`}>Open</a>{' '}
+        </div>
+      </div>
+      <div className='row'>
+        <div className='col'>
+          <div className='card'>
+            <div className='card-body'>
+              {renderAddTask(addNewTask)}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className='row'>
+        <div className='col'>
+          <h4>Existing tasks: {tasks.length}</h4>
+          {renderTasks(tasks, deleteTaskByIndex)}
+        </div>
+      </div>
+    </Page>
+  )
+}

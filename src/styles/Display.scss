@@ -2,11 +2,12 @@
 @import "colors";
 
 $use-filters: true;
+$border-radius: 8px;
 
 .card-stack {
     will-change: transform;
     position: relative;
-    width: 25rem;
+    width: 20rem;
     margin-left: auto;
     margin-right: auto;
     margin-top: 5rem;
@@ -85,13 +86,13 @@ $use-filters: true;
     top: 0;
     width: 100%;
     background-color: $color-main-blue;
-    color: #323232;
+    color: #212529;
     opacity: 0;
     transform: translateY(0) translateX(calc(-100% - 1rem)) scale(1);
     transition: transform .5s, opacity .2s .3s, filter .1s;
     transition-timing-function: ease-in;
-    box-shadow: 0 .2rem 0 rgba(#ffb0cd, .5);
-    border-radius: 5px;
+    //box-shadow: 0 .2rem 0 rgba(#ffb0cd, .5);
+    border-radius: $border-radius;
     justify-content: center;
     align-items: center;
     z-index: 1;
@@ -118,7 +119,7 @@ $use-filters: true;
         }
 
         img {
-            border-radius: 5px;
+            border-radius: $border-radius;
             width: 100%;
             height: auto;
         }
@@ -129,7 +130,7 @@ $use-filters: true;
         display: inline-block;
         padding: 0.4rem 2rem;
         background-color: rgba(1, 1, 1, 0.05);
-        border-radius: 200px;
+        border-radius: $border-radius;
         user-select: none;
     }
 
@@ -141,13 +142,13 @@ $use-filters: true;
 }
 
 .stack-card-hidden {
-    background: linear-gradient(-45deg, #f8dc88, #f76a8c, #c2f0fc, #ccf0e1);
+    background: linear-gradient(-45deg, #fd7e14, #dc3545, #0d6efd, #198754);
     color: #ffffff;
 
     background-size: 400% 400%;
     animation: gradient 5s ease infinite;
 
-    p {
+    label {
         font-weight: 600;
         font-size: 18pt;
     }
