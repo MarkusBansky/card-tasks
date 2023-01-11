@@ -1,6 +1,5 @@
 # 🖼️ Make presentation interactive with Tasks-as-Cards
 
-[![Known Vulnerabilities](https://snyk.io/test/github/markusbansky/card-tasks/badge.svg)](https://snyk.io/test/github/markusbansky/card-tasks)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FMarkusBansky%2Fcard-tasks.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FMarkusBansky%2Fcard-tasks?ref=badge_shield)
 
 This project is a simple React application that can display some of your defined tasks in a stack of cards.
@@ -23,3 +22,6 @@ yarn dev
 
 Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FMarkusBansky%2Fcard-tasks.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FMarkusBansky%2Fcard-tasks?ref=badge_large)
